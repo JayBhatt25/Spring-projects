@@ -1,11 +1,22 @@
 package com.jay.springboot.learnjpaandhibernate.course;
 
-import java.io.Serializable;
 
-public class Course implements Serializable {
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+public class Course  {
 	
+	@Id
 	private long id;
-	private String name, instructor;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="instructor")
+	private String instructor;
 	
 	public Course() {
 		
