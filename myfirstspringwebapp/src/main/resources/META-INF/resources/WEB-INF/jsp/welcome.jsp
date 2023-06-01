@@ -4,6 +4,7 @@
 	</head>
 	
 	<body>
-		Welcome to the application ${name} your password is ${password}
+		<div>Welcome to TODOs application, ${name}</div>
+		<div><a  href="list-todos">Manage</a> your todos</div>
 	</body>
 </html>
