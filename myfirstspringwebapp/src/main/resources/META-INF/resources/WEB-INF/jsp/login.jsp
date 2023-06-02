@@ -1,27 +1,19 @@
-<html>
-	<head>
-	<link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-		<title>Login Page</title>
-	</head>
-	
-	<body>
-		<div class="container">
-			<h1>Login</h1>
-			<pre>${errorMessage }</pre>
-			<form method="POST">
-				<div class="mb-3">
-					<label for="login-username" class="form-label">Name</label>
-					<input type="text" name="name" id="login-username" class="form-control" />
-				</div>
-				<div class="mb-3">
-					<label for="login-password" class="form-label">password</label>
-					<input type="password" name="password" class="form-control" id="login-password" />
-				</div>	  
-					<button type="submit" class="btn btn-primary">Submit</button>
-			</form> 
-		</div>
-		
-		<script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
-		<script src="webjars/jquery/3.6.0/jquery.min.js"></script>
-	</body>
-</html>
+
+	<%@ include file="common/header.jspf" %>
+	<%@ include file="common/navigation.jspf" %>
+	<div class="container">
+		<h1>Login</h1>
+		<pre>${errorMessage }</pre>
+		<form method="POST">
+			<div class="mb-3">
+				<label for="login-username" class="form-label">Name</label>
+				<input type="text" name="name" id="login-username" class="form-control" />
+			</div>
+			<div class="mb-3">
+				<label for="login-password" class="form-label">password</label>
+				<input type="password" name="password" class="form-control" id="login-password" />
+			</div>	  
+				<button type="submit" class="btn btn-primary">Submit</button>
+		</form> 
+	</div>
+	<%@ include file="common/footer.jspf" %>	
