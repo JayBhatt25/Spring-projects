@@ -19,8 +19,10 @@ export default function LoginComponent(){
 
     function handleSubmit(){
         if(authContext.login(username,password)){
+            authContext.setUsername(username)
             navigate(`/welcome/${username}`)
         } else {
+            authContext.setUsername("")
             setAuthMessage("Authentication failed. Please check your credentials")
         }
     }

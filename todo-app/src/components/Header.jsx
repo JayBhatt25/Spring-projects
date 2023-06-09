@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export default function HeaderComponent(){
 
     const authContext = useAuth();
-    const isLoggedin = authContext.isAuthenticated;
+    let isLoggedin = authContext.isAuthenticated;
 
     const handleLogout = () => {
         authContext.logout()

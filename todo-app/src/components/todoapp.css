@@ -40,3 +40,17 @@ hr {
 .btn-login {
     padding: 10px;
 }
+
+.action_btn_grp  {
+    width: 40%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.table-container {
+    margin-top: 3%;
+}

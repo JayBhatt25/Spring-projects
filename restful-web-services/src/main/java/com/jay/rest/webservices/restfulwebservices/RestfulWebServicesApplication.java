@@ -1,4 +1,4 @@
-package com.jay.springboot.myfirstspringwebapp;
+package com.jay.rest.webservices.restfulwebservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,21 +7,19 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class MyfirstspringwebappApplication {
+public class RestfulWebServicesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MyfirstspringwebappApplication.class, args);
+		SpringApplication.run(RestfulWebServicesApplication.class, args);
 	}
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-					.allowedMethods("*")
-					.allowedOrigins("http://localhost:3000");
+			public void addCorsMapping(CorsRegistry registry) {
+				registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://localhost:3000");
 			}
 		};
 	}
-
+	
 }

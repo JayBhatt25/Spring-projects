@@ -1,54 +1,78 @@
+import { useEffect, useState } from "react"
+import { deleteTodoById, retrieveAllTodosForUsername } from "./api/TodoApiService"
+import { useAuth } from "./security/AuthContext"
+import { useNavigate } from "react-router-dom";
+
 export default function TodosComponent(){
-    const todosList = [
-        {
-            id: 1,
-            description:"Learn AWS",
-            target_date:"06-07-2023",
-            username: "Jay",
-            done: "false"
-        },
-        {
-            id: 2,
-            description:"Learn Azure",
-            target_date:"06-07-2023",
-            username: "Jay",
-            done: "false"
-        },
-        {
-            id: 3,
-            description:"Learn GCP",
-            target_date:"06-07-2023",
-            username: "Jay",
-            done: "false"
-        }
-    ]
+    
+    const authContext = useAuth();
+    const [todosList, setTodosList] = useState([])
+    const [message, setMessage] = useState("")
+    const navigate = useNavigate()
+    function refreshTodos(){
+      retrieveAllTodosForUsername(authContext.username)
+     .then(response => {
+        setTodosList(response.data)
+     })
+     .catch(error => {console.log(error)})
+    }
+     
+    useEffect(
+        () => refreshTodos(),[]
+    )
+
+    const handleDelete = (id) => {
+        deleteTodoById(authContext.username,id)
+        .then(response => {
+            setMessage(`Todo item deleted successfully`)
+            refreshTodos()
+        })
+        .catch(error => {console.log(error)})
+    }
+
+    const handleUpdate = (id) => {
+        navigate(`/todos/${id}`)
+    }
+
+    const addNewTodo = () => {
+        navigate('/todos/-1')
+    }
     return (
         <div className="container">
             <h1>Things You Want To Do!</h1>
-            <div>
-                <table className='table'>
-                    <thead>
-                        <th scope='col'>Id</th>
-                        <th scope='col'>Description</th>
-                        <th scope='col'>TargetDate</th>
-                        <th scope='col'>Username</th>
-                        <th scope='col'>isDone?</th>
-                    </thead>
-                    <tbody>
-                        {todosList.map((todo, i) => {
-                           return (
-                            <tr key={todo.id}>
-                                <td>{todo.id}</td>
-                                <td>{todo.description}</td>
-                                <td>{todo.target_date}</td>
-                                <td>{todo.username}</td>
-                                <td>{todo.done}</td>
-                            </tr>
-                           )
-        
-                        })}
-                    </tbody>
-                </table>
+            {message.length > 0 && <div className="alert alert-warning">{message}</div>}
+            <div className="table-container">
+                {todosList.length > 0? (
+                     <table className='table'>
+                        <thead>
+                            <th scope='col'>Description</th>
+                            <th scope='col'>TargetDate</th>
+                            <th scope='col'>isDone?</th>
+                            <th scope='col'>Actions</th>
+                        </thead>
+                        <tbody>
+                            {todosList.map((todo, i) => {
+                                return (
+                                <tr key={todo.id}>
+                                    <td>{todo.description}</td>
+                                    <td>{todo.targetDate}</td>
+                                    <td>{todo.done.toString()}</td>
+                                    <td>
+                                        <div className="action_btn_grp">
+                                            <button type="button" className="btn btn-warning update-btn" onClick={() => handleUpdate(todo.id)}>UPDATE</button>
+                                            <button type="button" className="btn btn-danger" onClick={() => handleDelete(todo.id)}>DELETE</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                )
+            
+                            })}
+                        </tbody>
+                    </table>
+                ):(
+                    <h5>Nothing to show. Please add a todo item to get started</h5>
+                )}
+               <button type="button" className="btn btn-success m-5" onClick={addNewTodo}>ADD TODO</button>
             </div>
         </div>
     )
