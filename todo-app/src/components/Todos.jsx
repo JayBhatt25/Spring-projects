@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { deleteTodoById, retrieveAllTodosForUsername } from "./api/TodoApiService"
+import { toggleDoneApi, deleteTodoById, retrieveAllTodosForUsername } from "./api/TodoApiService"
 import { useAuth } from "./security/AuthContext"
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 export default function TodosComponent(){
     
@@ -10,11 +10,13 @@ export default function TodosComponent(){
     const [message, setMessage] = useState("")
     const navigate = useNavigate()
     function refreshTodos(){
-      retrieveAllTodosForUsername(authContext.username)
+      retrieveAllTodosForUsername(authContext.username,authContext.token)
      .then(response => {
         setTodosList(response.data)
      })
-     .catch(error => {console.log(error)})
+     .catch(error => {
+        redirect('*',{error: error})
+    })
     }
      
     useEffect(
@@ -22,12 +24,14 @@ export default function TodosComponent(){
     )
 
     const handleDelete = (id) => {
-        deleteTodoById(authContext.username,id)
+        deleteTodoById(authContext.username,id,authContext.token)
         .then(response => {
             setMessage(`Todo item deleted successfully`)
             refreshTodos()
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {
+            redirect('*',{error: error})
+        })
     }
 
     const handleUpdate = (id) => {
@@ -36,6 +40,16 @@ export default function TodosComponent(){
 
     const addNewTodo = () => {
         navigate('/todos/-1')
+    }
+
+    const handleDone = (id) => {
+        toggleDoneApi(authContext.username,id,authContext.token)
+        .then(response => {
+            if(response.data){
+                refreshTodos()
+            }
+        })
+        .catch(error => {})
     }
     return (
         <div className="container">
@@ -61,6 +75,8 @@ export default function TodosComponent(){
                                         <div className="action_btn_grp">
                                             <button type="button" className="btn btn-warning update-btn" onClick={() => handleUpdate(todo.id)}>UPDATE</button>
                                             <button type="button" className="btn btn-danger" onClick={() => handleDelete(todo.id)}>DELETE</button>
+                                            {!todo.done ? (<button type="button" className="btn btn-primary" onClick={() => handleDone(todo.id)}>MARK AS DONE</button>)
+                                            : (<button type="button" className="btn btn-primary" onClick={() => handleDone(todo.id)}>UNDO</button>)}
                                         </div>
                                     </td>
                                 </tr>

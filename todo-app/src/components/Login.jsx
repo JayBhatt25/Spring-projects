@@ -17,19 +17,23 @@ export default function LoginComponent(){
         setPassword(e.target.value)
     }
 
-    function handleSubmit(){
-        if(authContext.login(username,password)){
-            authContext.setUsername(username)
+    async function handleSubmit(){
+        if( await authContext.login(username,password)){
             navigate(`/welcome/${username}`)
         } else {
             authContext.setUsername("")
-            setAuthMessage("Authentication failed. Please check your credentials")
+            setAuthMessage("Only admin can log in at the moment. Please log in as guest to try out this application")
         }
     }
+
+    function handleGuestLogin(){
+            authContext.setUsername("Guest")
+            authContext.setIsAuthenticated(true)
+            navigate(`/welcome/Guest`)
+        }
     return (
         <div className="login">
-            <div className='notification'>{authMessage}</div>
-            {/* <div className='errorMessage'>Authentication failed. Please check your credentials</div> */}
+            {authMessage?(<div className='alert alert-warning'>{authMessage}</div>):(<div></div>)}
             <form className="loginForm">
                 <h2>Login</h2>
                 <hr/>
@@ -42,6 +46,8 @@ export default function LoginComponent(){
                     <input type="password" name="password" id="password" className="form-control" value={password} onChange={handlePasswordChange} />
                 </div>
                 <button type="button" className="btn-login btn btn-primary" name="login" onClick={handleSubmit}>login</button>
+                OR
+                <button type="button" className="btn btn-secondary" onClick={handleGuestLogin}>login as guest</button>
             </form>
             
         </div>

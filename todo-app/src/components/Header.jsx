@@ -19,7 +19,7 @@ export default function HeaderComponent(){
                     <a className="navbar-brand ms-2 fs-2 fw-bold text-black" href="#">TODO APP</a>
                     <div className="collapse navbar-collapse">
                         <ul className="navbar-nav">
-                            {isLoggedin && <li className="nav-item fs-5"><Link className="nav-link" to="/welcome/Jay">Home</Link></li> }
+                            {isLoggedin && <li className="nav-item fs-5"><Link className="nav-link" to={`/welcome/${authContext.username?authContext.username:"Guest"}`}>Home</Link></li> }
                             {isLoggedin && <li className="nav-item fs-5"><Link className="nav-link" to="/todos">Todos</Link></li>}
                         </ul>
                     </div>

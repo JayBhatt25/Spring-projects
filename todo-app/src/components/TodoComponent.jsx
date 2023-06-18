@@ -3,7 +3,7 @@ import { retrieveTodoApi, updateTodoApi, createTodoApi } from "./api/TodoApiServ
 import { useAuth } from "./security/AuthContext";
 import { useEffect, useState } from "react";
 import {ErrorMessage, Field, Form,Formik} from 'formik'
-import {moment} from 'moment'
+import moment from 'moment'
 export default function TodoComponent(){
     const {id} = useParams();
     const authContext = useAuth();
@@ -13,13 +13,12 @@ export default function TodoComponent(){
     const navigate = useNavigate()
     function retrieveTodo() {
         
-        retrieveTodoApi(authContext.username, id)
+        retrieveTodoApi(authContext.username, id,authContext.token)
         .then(response => {
-            console.log(response)
             setDescription(response.data.description)
             setTargetDate(response.data.targetDate)
         })
-        .catch(error => {console.log(error)})
+        .catch(error => {})
         
         
     }
@@ -37,31 +36,29 @@ export default function TodoComponent(){
             done:false
         }
         if(id != -1){
-            updateTodoApi(username,id,todo)
+            updateTodoApi(username,id,todo,authContext.token)
             .then(response => {
-                console.log(response)
                 navigate(`/todos`)
                 
             })
-            .catch(error => {console.log(error)})
+            .catch(error => {})
         } else {
-            createTodoApi(username,todo)
+            createTodoApi(username,todo,authContext.token)
             .then(response => {
-                console.log(response)
                 navigate(`/todos`)
             })
-            .catch(error => {console.log(error)})
+            .catch(error => {})
         }
        
 
     }
     const validate = (values) => {
         let errors = {}
-        if(values.description.length < 5){
+        if(values.description == null || values?.description?.length < 5){
             errors.description = "Enter atleast 5 characters"
         }
 
-        if(values.targetDate == null || values.targetDate === '' || !moment(values.targetDate).isValid()){
+        if(values?.targetDate == null || values?.targetDate === '' || !moment(values.targetDate).isValid()){
             errors.targetDate = "Please choose a target date"
         }
         return errors
@@ -86,7 +83,7 @@ export default function TodoComponent(){
                             </fieldset>
                             <fieldset className="form-group">
                                 <label>Target Date</label>
-                                <Field className="form-control" type="date" name="targetDate" />
+                                <Field className="form-control" type="date" name="targetDate"  />
                             </fieldset>
                             <button type="submit" className="btn btn-success m-5">Save</button>
                         </Form>
